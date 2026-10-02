@@ -151,4 +151,23 @@ theorem diagonalCentralizer_discriminant_square
     (a + d) ^ 2 - 4 * (a * d) = (a - d) ^ 2 := by
   ring
 
+
+/-- Full 2x2 discriminant decomposition. The only term capable of changing
+the diagonal square class is the product of the two off-diagonal entries. -/
+theorem matrix2_discriminant_offdiag_decomposition
+    {K : Type*} [CommRing K] (a b c d : K) :
+    (a + d) ^ 2 - 4 * (a * d - b * c) =
+      (a - d) ^ 2 + 4 * (b * c) := by
+  ring
+
+/-- Any triangular two-copy action still has square discriminant.
+Thus a non-square target class requires both off-diagonal directions
+to participate in the multiplicity action. -/
+theorem triangularCentralizer_discriminant_square
+    {K : Type*} [CommRing K] (a b c d : K)
+    (hbc : b * c = 0) :
+    (a + d) ^ 2 - 4 * (a * d - b * c) = (a - d) ^ 2 := by
+  rw [matrix2_discriminant_offdiag_decomposition, hbc]
+  ring
+
 end MetaEngine
