@@ -47,4 +47,5 @@ jobs:
         working-directory: upstream
         run: |
           set -euxo pipefail
-          lake env lean "$GITHUB_WORKSPACE/C5G0CountingDeltaCollapse.lean"
+          cp "$GITHUB_WORKSPACE/C5G0CountingDeltaCollapse.lean" YangMills/RG/C5G0CountingDeltaCollapse.lean
+          lake env lean YangMills/RG/C5G0CountingDeltaCollapse.lean
