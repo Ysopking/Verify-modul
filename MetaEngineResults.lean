@@ -85,4 +85,40 @@ theorem scalarLine_nonzero_linearMap_injective
   · exact sub_eq_zero.mp hxy0
   · exact (h1 h10).elim
 
+
+/-- RH amplitude-gap return: a strict radial separation from the unit point
+forces a quantitative cancellation defect. -/
+theorem rhAmplitudeGap_to_defect
+    (z : ℂ) (δ : ℝ)
+    (hgap : ‖z‖ ≤ 1 - δ) :
+    δ ≤ ‖(1 : ℂ) - z‖ := by
+  have htri : (1 : ℝ) - ‖z‖ ≤ ‖(1 : ℂ) - z‖ := by
+    simpa using norm_sub_norm_le (1 : ℂ) z
+  linarith
+
+/-- RH source-facing amplitude-gap return after substituting z = E/M. -/
+theorem rhAmplitudeGap_to_residual
+    (M E : ℂ) (δ : ℝ)
+    (hM : M ≠ 0)
+    (hgap : ‖E / M‖ ≤ 1 - δ) :
+    δ * ‖M‖ ≤ ‖M - E‖ := by
+  have hdef : δ ≤ ‖(1 : ℂ) - E / M‖ :=
+    rhAmplitudeGap_to_defect (E / M) δ hgap
+  rw [rhCancelNorm M E hM]
+  nlinarith [norm_nonneg M]
+
+/-- BSD calibration corollary: one independently nonzero image already proves
+injectivity of a linear realization from the scalar line. -/
+theorem scalarLine_calibration_injective
+    {K V : Type*}
+    [Field K] [AddCommGroup V] [Module K V]
+    (f : K →ₗ[K] V)
+    (η : K)
+    (hη : f η ≠ 0) :
+    Function.Injective f := by
+  apply scalarLine_nonzero_linearMap_injective f
+  intro hf
+  subst f
+  simp at hη
+
 end MetaEngine
