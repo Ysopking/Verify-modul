@@ -1,0 +1,55 @@
+name: Meta-engine formal results
+
+on:
+  push:
+    branches:
+      - meta-engine-formal-results
+  workflow_dispatch:
+
+jobs:
+  formal-results:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout verification harness
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned Eriksson source
+        uses: actions/checkout@v4
+        with:
+          repository: lluiseriksson/THE-ERIKSSON-PROGRAMME
+          ref: 8af5e2600c84ec20257f6bbee9b286c0c9527c01
+          path: upstream
+
+      - name: Verify exact source pin
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "8af5e2600c84ec20257f6bbee9b286c0c9527c01"
+          test "$(cat upstream/lean-toolchain)" = "leanprover/lean4:v4.29.0-rc6"
+          grep -q "07642720480157414db592fa85b626dafb71355b" upstream/lake-manifest.json
+
+      - name: Install elan
+        shell: bash
+        run: |
+          set -euxo pipefail
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Materialize pinned Lake dependencies
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          before="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
+          lake update
+          after="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
+          test "$before" = "$after"
+          lake exe cache get
+
+      - name: Compile formal meta-engine results
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          lake env lean "$GITHUB_WORKSPACE/MetaEngineResults.lean"
