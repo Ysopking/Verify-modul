@@ -59,6 +59,7 @@ jobs:
         run: |
           set -euxo pipefail
           lake build YangMills.RG.NeumannRectangleDirectionalMasks
+          lake build YangMills.RG.NeumannPhysicalImageSeam
 
       - name: Compile reconstructed strict-mask wrapper
         shell: bash
@@ -67,3 +68,5 @@ jobs:
           set -euxo pipefail
           cp "$GITHUB_WORKSPACE/RILapStrictMasks.lean" YangMills/RG/RILapStrictMasks.lean
           lake env lean YangMills/RG/RILapStrictMasks.lean
+          cp "$GITHUB_WORKSPACE/RILapBoundaryReal.lean" YangMills/RG/RILapBoundaryReal.lean
+          lake env lean YangMills/RG/RILapBoundaryReal.lean
