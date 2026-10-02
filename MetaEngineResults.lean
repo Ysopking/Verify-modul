@@ -226,4 +226,17 @@ theorem rhCorrectionMajorant_to_residual
     δ * ‖M‖ ≤ ‖M - E‖ := by
   exact rhAbsoluteAmplitudeGap_to_residual M E δ (le_trans hE hR)
 
+
+/-- Exact product equation for a DISC2 candidate. Once the discriminant is
+2*s^2, the product of the two off-diagonal entries is completely determined
+by the diagonal difference. -/
+theorem discTwoSquare_determines_offdiagProduct
+    {K : Type*} [CommRing K]
+    (a b c d s : K)
+    (hdisc :
+      (a + d) ^ 2 - 4 * (a * d - b * c) = 2 * s ^ 2) :
+    4 * (b * c) = 2 * s ^ 2 - (a - d) ^ 2 := by
+  rw [matrix2_discriminant_offdiag_decomposition] at hdisc
+  linear_combination hdisc
+
 end MetaEngine
