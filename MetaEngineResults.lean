@@ -199,4 +199,19 @@ theorem scalarLine_bireal_nonvanishing
   rw [hid] at hrpxi
   exact fun hlam => hrpxi (by simp [hlam])
 
+
+/-- If the discriminant of a two-copy action is not a square, the product of
+the two off-diagonal entries cannot vanish. This is the exact abstract
+obstruction used by the Hodge multiplicity-mixing gate. -/
+theorem nonsquareDiscriminant_forces_offdiagProduct
+    {K : Type*} [CommRing K] (a b c d : K)
+    (hns :
+      ¬ ∃ r : K,
+        (a + d) ^ 2 - 4 * (a * d - b * c) = r ^ 2) :
+    b * c ≠ 0 := by
+  intro hbc
+  apply hns
+  refine ⟨a - d, ?_⟩
+  exact triangularCentralizer_discriminant_square a b c d hbc
+
 end MetaEngine
