@@ -63,3 +63,11 @@ jobs:
         run: |
           set -euxo pipefail
           lake env lean "$GITHUB_WORKSPACE/C5ContractSmoke.lean"
+
+
+      - name: Compile C5-G0 counting delta collapse
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          lake env lean "$GITHUB_WORKSPACE/C5G0CountingDeltaCollapse.lean"
