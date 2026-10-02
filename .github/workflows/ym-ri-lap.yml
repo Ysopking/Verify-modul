@@ -68,5 +68,8 @@ jobs:
           set -euxo pipefail
           cp "$GITHUB_WORKSPACE/RILapStrictMasks.lean" YangMills/RG/RILapStrictMasks.lean
           lake env lean YangMills/RG/RILapStrictMasks.lean
+          lake build YangMills.RG.RILapStrictMasks
           cp "$GITHUB_WORKSPACE/RILapBoundaryReal.lean" YangMills/RG/RILapBoundaryReal.lean
           lake env lean YangMills/RG/RILapBoundaryReal.lean
+          cp "$GITHUB_WORKSPACE/RILapHalfOpenFinite.lean" YangMills/RG/RILapHalfOpenFinite.lean
+          lake env lean YangMills/RG/RILapHalfOpenFinite.lean
