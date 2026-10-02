@@ -176,12 +176,12 @@ A nonzero archimedean realization makes xi nonzero; one independent p-adic
 calibration makes the p-adic realization injective; a nonzero comparison
 scalar then transfers nonvanishing to the target coefficient. -/
 theorem scalarLine_bireal_nonvanishing
-    {K V∞ : Type*}
-    [Field K] [AddCommGroup V∞] [Module K V∞]
-    (r∞ : K →ₗ[K] V∞)
+    {K Vinf : Type*}
+    [Field K] [AddCommGroup Vinf] [Module K Vinf]
+    (rInf : K →ₗ[K] Vinf)
     (rP : K →ₗ[K] K)
     (xi eta cP lam : K)
-    (h∞ : r∞ xi ≠ 0)
+    (hInf : rInf xi ≠ 0)
     (hcal : rP eta ≠ 0)
     (hcP : cP ≠ 0)
     (hid : rP xi = cP * lam) :
@@ -189,7 +189,7 @@ theorem scalarLine_bireal_nonvanishing
   have hxi : xi ≠ 0 := by
     intro h
     subst xi
-    simp at h∞
+    simp at hInf
   have hinj : Function.Injective rP :=
     scalarLine_calibration_injective rP eta hcal
   have hrpxi : rP xi ≠ 0 := by
