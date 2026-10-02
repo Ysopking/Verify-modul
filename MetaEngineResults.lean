@@ -170,4 +170,33 @@ theorem triangularCentralizer_discriminant_square
   rw [matrix2_discriminant_offdiag_decomposition, hbc]
   ring
 
+
+/-- Abstract BIREAL2 return on a one-dimensional scalar line.
+A nonzero archimedean realization makes xi nonzero; one independent p-adic
+calibration makes the p-adic realization injective; a nonzero comparison
+scalar then transfers nonvanishing to the target coefficient. -/
+theorem scalarLine_bireal_nonvanishing
+    {K V∞ : Type*}
+    [Field K] [AddCommGroup V∞] [Module K V∞]
+    (r∞ : K →ₗ[K] V∞)
+    (rP : K →ₗ[K] K)
+    (xi eta cP lam : K)
+    (h∞ : r∞ xi ≠ 0)
+    (hcal : rP eta ≠ 0)
+    (hcP : cP ≠ 0)
+    (hid : rP xi = cP * lam) :
+    lam ≠ 0 := by
+  have hxi : xi ≠ 0 := by
+    intro h
+    subst xi
+    simp at h∞
+  have hinj : Function.Injective rP :=
+    scalarLine_calibration_injective rP eta hcal
+  have hrpxi : rP xi ≠ 0 := by
+    intro hzero
+    have : rP xi = rP 0 := by simpa using hzero
+    exact hxi (hinj this)
+  rw [hid] at hrpxi
+  exact fun hlam => hrpxi (by simp [hlam])
+
 end MetaEngine
