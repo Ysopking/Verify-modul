@@ -142,4 +142,13 @@ theorem scalarCentralizer_discriminant_zero
   ring
 
 
+
+/-- A diagonal two-copy action has square discriminant:
+(tr A)^2 - 4 det A = (a-d)^2. This isolates the geometric need for
+off-diagonal multiplicity mixing when the target square class is nontrivial. -/
+theorem diagonalCentralizer_discriminant_square
+    {K : Type*} [CommRing K] (a d : K) :
+    (a + d) ^ 2 - 4 * (a * d) = (a - d) ^ 2 := by
+  ring
+
 end MetaEngine
