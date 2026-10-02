@@ -121,4 +121,34 @@ theorem scalarLine_calibration_injective
   subst f
   simp at hη
 
+
+/-- RH absolute amplitude-gap form: if the correction is smaller than the
+main term by a relative factor δ, reverse triangle inequality gives the
+residual lower bound directly, without dividing by M. -/
+theorem rhAbsoluteAmplitudeGap_to_residual
+    (M E : ℂ) (δ : ℝ)
+    (hgap : ‖E‖ ≤ (1 - δ) * ‖M‖) :
+    δ * ‖M‖ ≤ ‖M - E‖ := by
+  have hrev : ‖M‖ - ‖E‖ ≤ ‖M - E‖ :=
+    norm_sub_norm_le M E
+  nlinarith
+
+/-- Scalar-only centralizer actions have zero quadratic discriminant.
+Hence the already-known scalar Hecke/F-action cannot by itself satisfy the
+nonzero square-class-2 Hodge gate. -/
+theorem scalarCentralizer_discriminant_zero
+    {K : Type*} [CommRing K] (a : K) :
+    (2 * a) ^ 2 - 4 * (a ^ 2) = 0 := by
+  ring
+
+/-- Over an ordered field, a scalar-only action cannot have discriminant
+2*s² with s nonzero. -/
+theorem scalarCentralizer_not_disc_two_square
+    {K : Type*} [LinearOrderedField K]
+    (a s : K) (hs : s ≠ 0) :
+    (2 * a) ^ 2 - 4 * (a ^ 2) ≠ 2 * s ^ 2 := by
+  rw [scalarCentralizer_discriminant_zero]
+  have hs2 : 0 < s ^ 2 := sq_pos_of_ne_zero hs
+  nlinarith
+
 end MetaEngine
