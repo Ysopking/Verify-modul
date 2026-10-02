@@ -51,7 +51,10 @@ theorem neumannReflectionImage_eq_rectanglePoint_iff_identity
     exact ⟨congrArg (fun p => p.1) hfull,
       congrArg (fun p => p.2.1) hfull,
       congrArg (fun p => p.2.2) hfull⟩
-  · rintro ⟨rfl, rfl, rfl⟩
+  · rintro ⟨hk, hb, hn⟩
+    subst k
+    subst n
+    rw [hb]
     exact neumannReflectionImage_identity m x
 
 theorem cmp89NeumannReflectionSeries_countingDelta
@@ -77,7 +80,10 @@ theorem cmp89NeumannReflectionSeries_countingDelta
             (neumannReflectionImage_eq_rectanglePoint_iff_identity
               m hm x x 0 b).1 h
           exact hne hiff.2.1
-        simp [cmp89CountingDelta, himage]
+        have himage' :
+            x.1 ≠ cmp89NeumannReflectionImage m x.1 0 b :=
+          fun h => himage h.symm
+        simp [cmp89CountingDelta, himage']
       · simp
     · intro k hk
       apply Finset.sum_eq_zero
@@ -89,7 +95,10 @@ theorem cmp89NeumannReflectionSeries_countingDelta
           (neumannReflectionImage_eq_rectanglePoint_iff_identity
             m hm x x k b).1 h
         exact hk hiff.1
-      simp [cmp89CountingDelta, himage]
+      have himage' :
+          x.1 ≠ cmp89NeumannReflectionImage m x.1 k b :=
+        fun h => himage h.symm
+      simp [cmp89CountingDelta, himage']
   · rw [if_neg hxn]
     have hzero :
         (fun k : Fin d → ℤ =>
@@ -107,8 +116,11 @@ theorem cmp89NeumannReflectionSeries_countingDelta
             m hm x n k b).1 h.symm
         exact hxn hiff.2.2.symm
       simp [cmp89CountingDelta, himage]
-    rw [hzero]
-    simp
+    have ht :=
+      congrArg
+        (fun f : (Fin d → ℤ) → ℝ => ∑' k, f k)
+        hzero
+    simpa using ht
 
 end
 
