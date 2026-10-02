@@ -214,4 +214,16 @@ theorem nonsquareDiscriminant_forces_offdiagProduct
   refine ⟨a - d, ?_⟩
   exact triangularCentralizer_discriminant_square a b c d hbc
 
+
+/-- RH majorant-return interface. Any independently proved upper bound R on the
+correction norm that lies below the strict main-term threshold immediately
+returns the residual lower bound. This isolates the remaining arithmetic work
+from the functional-analytic return. -/
+theorem rhCorrectionMajorant_to_residual
+    (M E : ℂ) (R δ : ℝ)
+    (hE : ‖E‖ ≤ R)
+    (hR : R ≤ (1 - δ) * ‖M‖) :
+    δ * ‖M‖ ≤ ‖M - E‖ := by
+  exact rhAbsoluteAmplitudeGap_to_residual M E δ (le_trans hE hR)
+
 end MetaEngine
