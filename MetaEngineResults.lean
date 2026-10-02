@@ -141,14 +141,5 @@ theorem scalarCentralizer_discriminant_zero
     (2 * a) ^ 2 - 4 * (a ^ 2) = 0 := by
   ring
 
-/-- Over an ordered field, a scalar-only action cannot have discriminant
-2*s² with s nonzero. -/
-theorem scalarCentralizer_not_disc_two_square
-    {K : Type*} [LinearOrderedField K]
-    (a s : K) (hs : s ≠ 0) :
-    (2 * a) ^ 2 - 4 * (a ^ 2) ≠ 2 * s ^ 2 := by
-  rw [scalarCentralizer_discriminant_zero]
-  have hs2 : 0 < s ^ 2 := sq_pos_of_ne_zero hs
-  nlinarith
 
 end MetaEngine
