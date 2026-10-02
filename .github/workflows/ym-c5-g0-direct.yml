@@ -42,6 +42,16 @@ jobs:
           after="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
           test "$before" = "$after"
           lake exe cache get
+      - name: Build exact C5-G0 import cone
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          lake build \
+            YangMills.RG.NeumannImageRectangleCoverage \
+            YangMills.RG.BalabanCMP89Eq246FinePointSourceFibreGreen \
+            YangMills.RG.BalabanCMP99SourceFlatGeneratedPrecisionScalarDictionary
+
       - name: Direct compile recovered C5-G0 source
         shell: bash
         working-directory: upstream
