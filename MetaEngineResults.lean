@@ -27,8 +27,8 @@ theorem quadraticCenteringOfRelation {R : Type*} [CommRing R]
     (x t d : R)
     (hquad : x ^ 2 - t * x + d = 0) :
     (2 * x - t) ^ 2 = t ^ 2 - 4 * d := by
-  rw [quadraticCenteringIdentity]
-  simp [hquad]
+  rw [quadraticCenteringIdentity, hquad]
+  ring
 
 /-- Square-class-2 specialization: once the discriminant is 2*s² and s is a
 unit, normalization produces an element whose square is exactly 2. -/
