@@ -239,4 +239,25 @@ theorem discTwoSquare_determines_offdiagProduct
   rw [matrix2_discriminant_offdiag_decomposition] at hdisc
   linear_combination hdisc
 
+
+/-- Abstract square-root tradeoff behind the one-tape block/crossing
+decomposition. If two nonnegative resource terms B and C must satisfy
+t <= B*C, then at least one of them is at least sqrt(t). -/
+theorem partitionReplay_sqrt_barrier
+    (t B C : ℝ)
+    (ht : 0 ≤ t)
+    (hB : 0 ≤ B)
+    (hC : 0 ≤ C)
+    (hprod : t ≤ B * C) :
+    Real.sqrt t ≤ max B C := by
+  have hBm : B ≤ max B C := le_max_left _ _
+  have hCm : C ≤ max B C := le_max_right _ _
+  have hm : 0 ≤ max B C := le_trans hB hBm
+  have hBC : B * C ≤ (max B C) ^ 2 := by
+    nlinarith
+  have hs : (Real.sqrt t) ^ 2 = t := by
+    exact Real.sq_sqrt ht
+  have hs0 : 0 ≤ Real.sqrt t := Real.sqrt_nonneg t
+  nlinarith
+
 end MetaEngine
