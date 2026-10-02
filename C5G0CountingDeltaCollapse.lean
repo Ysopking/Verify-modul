@@ -52,7 +52,7 @@ theorem neumannReflectionImage_eq_rectanglePoint_iff_identity
       congrArg (fun p => p.2.1) hfull,
       congrArg (fun p => p.2.2) hfull⟩
   · rintro ⟨rfl, rfl, rfl⟩
-    exact neumannReflectionImage_identity m x
+    simp only [neumannReflectionImage_identity]
 
 theorem cmp89NeumannReflectionSeries_countingDelta
     {d : ℕ}
@@ -77,7 +77,10 @@ theorem cmp89NeumannReflectionSeries_countingDelta
             (neumannReflectionImage_eq_rectanglePoint_iff_identity
               m hm x x 0 b).1 h
           exact hne hiff.2.1
-        simp [cmp89CountingDelta, himage]
+        have hximage :
+            x.1 ≠ cmp89NeumannReflectionImage m x.1 0 b :=
+          fun h => himage h.symm
+        simp [cmp89CountingDelta, hximage]
       · simp
     · intro k hk
       apply Finset.sum_eq_zero
@@ -89,7 +92,10 @@ theorem cmp89NeumannReflectionSeries_countingDelta
           (neumannReflectionImage_eq_rectanglePoint_iff_identity
             m hm x x k b).1 h
         exact hk hiff.1
-      simp [cmp89CountingDelta, himage]
+      have hximage :
+          x.1 ≠ cmp89NeumannReflectionImage m x.1 k b :=
+        fun h => himage h.symm
+      simp [cmp89CountingDelta, hximage]
   · rw [if_neg hxn]
     have hzero :
         (fun k : Fin d → ℤ =>
@@ -108,7 +114,7 @@ theorem cmp89NeumannReflectionSeries_countingDelta
         exact hxn hiff.2.2.symm
       simp [cmp89CountingDelta, himage]
     rw [hzero]
-    simp
+    exact tsum_zero
 
 end
 
