@@ -60,3 +60,16 @@ jobs:
         run: |
           set -euxo pipefail
           lake env lean "$GITHUB_WORKSPACE/C5G0Core.lean"
+
+      - name: Install importable C5-G0 module
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cp "$GITHUB_WORKSPACE/patches/YangMills/RG/C5G0CountingDeltaCollapse.lean"             "$GITHUB_WORKSPACE/upstream/YangMills/RG/C5G0CountingDeltaCollapse.lean"
+
+      - name: Build importable C5-G0 module
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          lake build YangMills.RG.C5G0CountingDeltaCollapse
