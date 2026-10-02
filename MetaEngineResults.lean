@@ -66,18 +66,22 @@ theorem scalarLine_nonzero_linearMap_injective
   have h1 : f 1 ≠ 0 := by
     intro h
     apply hf
-    ext x
+    apply LinearMap.ext
+    intro x
     calc
-      f x = x • f 1 := by
-        simpa using f.map_smul x (1 : K)
+      f x = f (x • (1 : K)) := by simp
+      _ = x • f 1 := f.map_smul x (1 : K)
       _ = 0 := by simp [h]
       _ = (0 : K →ₗ[K] V) x := rfl
   intro x y hxy
   have hz : f (x - y) = 0 := by
     rw [map_sub, hxy, sub_self]
-  have hs : (x - y) • f 1 = 0 := by
-    simpa using hz
-  rcases smul_eq_zero.mp hs with hxy0 | h10
+  have hrep : f (x - y) = (x - y) • f 1 := by
+    calc
+      f (x - y) = f ((x - y) • (1 : K)) := by simp
+      _ = (x - y) • f 1 := f.map_smul (x - y) (1 : K)
+  rw [hrep] at hz
+  rcases smul_eq_zero.mp hz with hxy0 | h10
   · exact sub_eq_zero.mp hxy0
   · exact (h1 h10).elim
 
