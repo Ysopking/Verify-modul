@@ -18,7 +18,8 @@ noncomputable section
 
 variable {d N Nc : ℕ} [NeZero d] [NeZero N] [NeZero Nc]
 
-theorem cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
+set_option maxHeartbeats 2000000 in
+ theorem cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
     {F : Type*}
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     {m : Fin d → ℤ}
