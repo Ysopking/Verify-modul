@@ -42,12 +42,20 @@ jobs:
           after="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
           test "$before" = "$after"
           lake exe cache get
+      - name: Restore exact C5 parent build cache
+        uses: actions/cache@v4
+        with:
+          path: upstream/.lake/build
+          key: ym-c5-three-species-${{ runner.os }}-8af5e2600c84ec20257f6bbee9b286c0c9527c01-v1
       - name: Build exact parent modules
         shell: bash
         working-directory: upstream
         run: |
           set -euxo pipefail
-          lake build             YangMills.RG.FinitePiLpPointSourceRightInverse             YangMills.RG.BalabanCMP89NeumannMassReflection             YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
+          lake build \
+            YangMills.RG.FinitePiLpPointSourceRightInverse \
+            YangMills.RG.BalabanCMP89NeumannMassReflection \
+            YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
       - name: Compile R3 three-species probe
         shell: bash
         run: |
