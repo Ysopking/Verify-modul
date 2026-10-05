@@ -9,7 +9,7 @@ on:
 jobs:
   three-species-r3:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         name: Checkout harness
@@ -42,11 +42,27 @@ jobs:
           after="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
           test "$before" = "$after"
           lake exe cache get
-      - name: Restore exact C5 parent build cache
-        uses: actions/cache@v4
+      - name: Restore C5 parent build cache
+        id: cache-parent
+        uses: actions/cache/restore@v4
         with:
           path: upstream/.lake/build
-          key: ym-c5-three-species-${{ runner.os }}-8af5e2600c84ec20257f6bbee9b286c0c9527c01-v1
+          key: ym-c5-r3-parent-${{ runner.os }}-8af5e2600c84ec20257f6bbee9b286c0c9527c01-v2
+      - name: Build exact parent modules
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          lake build \
+            YangMills.RG.FinitePiLpPointSourceRightInverse \
+            YangMills.RG.BalabanCMP89NeumannMassReflection \
+            YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
+      - name: Save C5 parent build cache
+        if: steps.cache-parent.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: upstream/.lake/build
+          key: ym-c5-r3-parent-${{ runner.os }}-8af5e2600c84ec20257f6bbee9b286c0c9527c01-v2
       - name: Compile R3 three-species probe
         shell: bash
         run: |
@@ -54,3 +70,13 @@ jobs:
           cp probes/C5ThreeSpeciesR3.lean upstream/tmp/C5ThreeSpeciesR3.lean
           cd upstream
           lake env lean tmp/C5ThreeSpeciesR3.lean
+      - name: Audit R3 theorem axioms
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cat > upstream/tmp/C5ThreeSpeciesR3Audit.lean <<'EOF'
+          import «tmp.C5ThreeSpeciesR3»
+          #print axioms YangMills.RG.cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
+          EOF
+          cd upstream
+          lake env lean tmp/C5ThreeSpeciesR3Audit.lean
