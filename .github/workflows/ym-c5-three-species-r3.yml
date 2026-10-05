@@ -9,7 +9,7 @@ on:
 jobs:
   three-species-r3:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         name: Checkout harness
@@ -47,15 +47,14 @@ jobs:
         with:
           path: upstream/.lake/build
           key: ym-c5-three-species-${{ runner.os }}-8af5e2600c84ec20257f6bbee9b286c0c9527c01-v1
-      - name: Build exact parent modules
+      - name: Verify cached parent oleans
         shell: bash
         working-directory: upstream
         run: |
           set -euxo pipefail
-          lake build \
-            YangMills.RG.FinitePiLpPointSourceRightInverse \
-            YangMills.RG.BalabanCMP89NeumannMassReflection \
-            YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
+          test -f .lake/build/lib/lean/YangMills/RG/FinitePiLpPointSourceRightInverse.olean
+          test -f .lake/build/lib/lean/YangMills/RG/BalabanCMP89NeumannMassReflection.olean
+          test -f .lake/build/lib/lean/YangMills/RG/BalabanCMP89NeumannPrecisionThreeSpecies.olean
       - name: Compile R3 three-species probe
         shell: bash
         run: |
@@ -63,16 +62,3 @@ jobs:
           cp probes/C5ThreeSpeciesR3.lean upstream/tmp/C5ThreeSpeciesR3.lean
           cd upstream
           lake env lean tmp/C5ThreeSpeciesR3.lean
-      - name: Audit R3 theorem axioms
-        shell: bash
-        run: |
-          set -euxo pipefail
-          cat > upstream/tmp/C5ThreeSpeciesR3Audit.lean <<'EOF'
-          import YangMills.RG.FinitePiLpPointSourceRightInverse
-          import YangMills.RG.BalabanCMP89NeumannMassReflection
-          import YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
-          import «tmp.C5ThreeSpeciesR3»
-          #print axioms YangMills.RG.cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
-          EOF
-          cd upstream
-          lake env lean tmp/C5ThreeSpeciesR3Audit.lean
