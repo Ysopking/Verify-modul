@@ -1,0 +1,70 @@
+name: YM C5 R3 three-species probe
+
+on:
+  push:
+    branches:
+      - ym-c5-three-species-r3-fix
+  workflow_dispatch:
+
+jobs:
+  three-species-r3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout harness
+      - uses: actions/checkout@v4
+        name: Checkout pinned upstream
+        with:
+          repository: lluiseriksson/THE-ERIKSSON-PROGRAMME
+          ref: 8af5e2600c84ec20257f6bbee9b286c0c9527c01
+          path: upstream
+      - name: Verify pins
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "8af5e2600c84ec20257f6bbee9b286c0c9527c01"
+          test "$(cat upstream/lean-toolchain)" = "leanprover/lean4:v4.29.0-rc6"
+          grep -q "07642720480157414db592fa85b626dafb71355b" upstream/lake-manifest.json
+      - name: Install elan
+        shell: bash
+        run: |
+          set -euxo pipefail
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Materialize dependencies
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          before="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
+          lake update
+          after="$(sha256sum lake-manifest.json | cut -d' ' -f1)"
+          test "$before" = "$after"
+          lake exe cache get
+      - name: Build exact parent modules
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
+          lake build             YangMills.RG.FinitePiLpPointSourceRightInverse             YangMills.RG.BalabanCMP89NeumannMassReflection             YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
+      - name: Compile R3 three-species probe
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cp probes/C5ThreeSpeciesR3.lean upstream/tmp/C5ThreeSpeciesR3.lean
+          cd upstream
+          lake env lean tmp/C5ThreeSpeciesR3.lean
+      - name: Audit R3 theorem axioms
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cat > upstream/tmp/C5ThreeSpeciesR3Audit.lean <<'EOF'
+          import YangMills.RG.FinitePiLpPointSourceRightInverse
+          import YangMills.RG.BalabanCMP89NeumannMassReflection
+          import YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
+          import «tmp.C5ThreeSpeciesR3»
+          #print axioms YangMills.RG.cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
+          EOF
+          cd upstream
+          lake env lean tmp/C5ThreeSpeciesR3Audit.lean
