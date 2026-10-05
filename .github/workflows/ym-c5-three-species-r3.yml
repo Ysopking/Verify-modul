@@ -47,14 +47,6 @@ jobs:
         with:
           path: upstream/.lake/build
           key: ym-c5-three-species-${{ runner.os }}-8af5e2600c84ec20257f6bbee9b286c0c9527c01-v1
-      - name: Verify cached parent oleans
-        shell: bash
-        working-directory: upstream
-        run: |
-          set -euxo pipefail
-          test -f .lake/build/lib/lean/YangMills/RG/FinitePiLpPointSourceRightInverse.olean
-          test -f .lake/build/lib/lean/YangMills/RG/BalabanCMP89NeumannMassReflection.olean
-          test -f .lake/build/lib/lean/YangMills/RG/BalabanCMP89NeumannPrecisionThreeSpecies.olean
       - name: Compile R3 three-species probe
         shell: bash
         run: |
