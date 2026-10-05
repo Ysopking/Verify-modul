@@ -5,6 +5,8 @@ import YangMills.RG.BalabanCMP89NeumannPrecisionThreeSpecies
 /-!
 # R3 probe: point-source three-species reduction
 
+Compiler retry: exact parent graph persisted before wrapper seal.
+
 This isolated verification probe keeps the exact pinned upstream source and
 rebuilds only the failed local theorem descendant from Run 37039688079.
 It does not assert FULLG-FUND, RI-LAP-IMG, RI-Q, C5-G0, or global Yang-Mills.
