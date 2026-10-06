@@ -73,3 +73,5 @@ jobs:
           lake env lean YangMills/RG/RILapBoundaryReal.lean
           cp "$GITHUB_WORKSPACE/RILapHalfOpenFinite.lean" YangMills/RG/RILapHalfOpenFinite.lean
           lake env lean YangMills/RG/RILapHalfOpenFinite.lean
+          cp "$GITHUB_WORKSPACE/RILapGhostFullStencil.lean" YangMills/RG/RILapGhostFullStencil.lean
+          lake env lean YangMills/RG/RILapGhostFullStencil.lean
