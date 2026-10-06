@@ -25,7 +25,7 @@ theorem neumannActualFullGreenReflectionReal_lowerGhost
     (hm : ∀ i, 0 < m i) (htarget : target mu = 0) :
     neumannActualFullGreenReflectionReal (L := L) (j := j) mass a m
       (fun i => if i = mu then -1 else target i) source =
-    neumannActualFullGreenReflectionReal mass a m target source := by
+    neumannActualFullGreenReflectionReal (L := L) (j := j) mass a m target source := by
   unfold neumannActualFullGreenReflectionReal
   exact congrArg Complex.re
     (neumannActualFullGreenImage_lowerGhost
@@ -48,7 +48,7 @@ theorem neumannActualFullGreenReflectionReal_upperGhost
     (htarget : target mu = m mu - 1) :
     neumannActualFullGreenReflectionReal (L := L) (j := j) mass a m
       (fun i => if i = mu then m mu else target i) source =
-    neumannActualFullGreenReflectionReal mass a m target source := by
+    neumannActualFullGreenReflectionReal (L := L) (j := j) mass a m target source := by
   unfold neumannActualFullGreenReflectionReal
   exact congrArg Complex.re
     (neumannActualFullGreenImage_upperGhost
