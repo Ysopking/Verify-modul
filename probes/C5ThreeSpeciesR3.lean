@@ -127,3 +127,5 @@ set_option maxHeartbeats 2000000 in
 end
 
 end YangMills.RG
+
+#print axioms YangMills.RG.cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
