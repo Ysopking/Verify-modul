@@ -23,7 +23,7 @@ theorem neumannActualFullGreenReflectionReal_lowerGhost
     (hmass : CMP89Eq251UniformMassWindow mass)
     (mu : Fin 4) (m target source : Fin 4 → ℤ)
     (hm : ∀ i, 0 < m i) (htarget : target mu = 0) :
-    neumannActualFullGreenReflectionReal mass a m
+    neumannActualFullGreenReflectionReal (L := L) (j := j) mass a m
       (fun i => if i = mu then -1 else target i) source =
     neumannActualFullGreenReflectionReal mass a m target source := by
   unfold neumannActualFullGreenReflectionReal
@@ -46,7 +46,7 @@ theorem neumannActualFullGreenReflectionReal_upperGhost
     (hm : ∀ i, 0 < m i)
     (hboundary : m mu = ((L ^ j : ℕ) : ℤ) * B)
     (htarget : target mu = m mu - 1) :
-    neumannActualFullGreenReflectionReal mass a m
+    neumannActualFullGreenReflectionReal (L := L) (j := j) mass a m
       (fun i => if i = mu then m mu else target i) source =
     neumannActualFullGreenReflectionReal mass a m target source := by
   unfold neumannActualFullGreenReflectionReal
