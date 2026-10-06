@@ -29,6 +29,7 @@ theorem neumannActualFullGreenReflectionReal_lowerGhost
   unfold neumannActualFullGreenReflectionReal
   exact congrArg Complex.re
     (neumannActualFullGreenImage_lowerGhost
+      (L := L) (j := j) (mass := mass) (a := a) (rho := rho)
       ha hrho hamplitude hradius hdenWindow hpairWindow hmass
       mu m target source hm htarget)
 
@@ -51,6 +52,7 @@ theorem neumannActualFullGreenReflectionReal_upperGhost
   unfold neumannActualFullGreenReflectionReal
   exact congrArg Complex.re
     (neumannActualFullGreenImage_upperGhost
+      (L := L) (j := j) (mass := mass) (a := a) (rho := rho)
       ha hrho hamplitude hradius hdenWindow hpairWindow hmass
       mu B m target source hm hboundary htarget)
 
