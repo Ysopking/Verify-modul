@@ -69,14 +69,13 @@ jobs:
           set -euxo pipefail
           cp probes/C5ThreeSpeciesR3.lean upstream/tmp/C5ThreeSpeciesR3.lean
           cd upstream
-          lake env lean tmp/C5ThreeSpeciesR3.lean
+          lake env lean tmp/C5ThreeSpeciesR3.lean 2>&1 | tee ../C5ThreeSpeciesR3.log
       - name: Audit R3 theorem axioms
         shell: bash
         run: |
           set -euxo pipefail
-          cat > upstream/tmp/C5ThreeSpeciesR3Audit.lean <<'EOF'
-          import «tmp.C5ThreeSpeciesR3»
-          #print axioms YangMills.RG.cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3
-          EOF
-          cd upstream
-          lake env lean tmp/C5ThreeSpeciesR3Audit.lean
+          grep -q "cmp89SourceNeumannRegionalGaugePrecision_comp_reflection_eq_id_iff_pointSource_threeSpecies_r3" C5ThreeSpeciesR3.log
+          if grep -q "sorryAx" C5ThreeSpeciesR3.log; then
+            echo "Unexpected sorryAx in theorem audit"
+            exit 1
+          fi
