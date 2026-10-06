@@ -61,7 +61,7 @@ jobs:
           lake build YangMills.RG.NeumannRectangleDirectionalMasks
           lake build YangMills.RG.NeumannPhysicalImageSeam
 
-      - name: Compile reconstructed strict-mask wrapper
+      - name: Compile RI-LAP strict masks
         shell: bash
         working-directory: upstream
         run: |
@@ -69,9 +69,30 @@ jobs:
           cp "$GITHUB_WORKSPACE/RILapStrictMasks.lean" YangMills/RG/RILapStrictMasks.lean
           lake env lean YangMills/RG/RILapStrictMasks.lean
           lake build YangMills.RG.RILapStrictMasks
+
+      - name: Compile RI-LAP boundary real bridge
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
           cp "$GITHUB_WORKSPACE/RILapBoundaryReal.lean" YangMills/RG/RILapBoundaryReal.lean
           lake env lean YangMills/RG/RILapBoundaryReal.lean
+          lake build YangMills.RG.RILapBoundaryReal
+
+      - name: Compile RI-LAP half-open finite stencil
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
           cp "$GITHUB_WORKSPACE/RILapHalfOpenFinite.lean" YangMills/RG/RILapHalfOpenFinite.lean
           lake env lean YangMills/RG/RILapHalfOpenFinite.lean
+          lake build YangMills.RG.RILapHalfOpenFinite
+
+      - name: Compile RI-LAP ghost full stencil
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euxo pipefail
           cp "$GITHUB_WORKSPACE/RILapGhostFullStencil.lean" YangMills/RG/RILapGhostFullStencil.lean
           lake env lean YangMills/RG/RILapGhostFullStencil.lean
+          lake build YangMills.RG.RILapGhostFullStencil
